@@ -16,7 +16,13 @@ var nums = elem(".num"),
   operator,
   resultNum,
   eq = elem("#eq"),
-  clearBTN = elem("#clear");
+  clearBTN = elem("#clear"),
+  clearOne1 = elem("#clearOne"),
+  oper = elem("#oper"),
+  plus = elem("#plus"),
+  minus = elem("#minus"),
+  umn = elem("#umn"),
+  del = elem("#del");
 
 // FUNCTIONS
 
@@ -26,41 +32,50 @@ function setNum() {
   }
   firstNum += this.innerHTML;
   result.innerHTML = firstNum;
+  eq.disabled = false;
 }
 
 function setOperator() {
   secondNum = firstNum;
   firstNum = "";
   operator = this.getAttribute("data-ops");
+  oper.innerHTML = operator;
+  oper.classList.add("re");
+  setTimeout("oper.classList.remove('re')", 1000);
+  plus.disabled = true;
+  minus.disabled = true;
+  umn.disabled = true;
+  del.disabled = true;
 }
 
 function getResult() {
   firstNum = parseFloat(firstNum);
   secondNum = parseFloat(secondNum);
-
-
   switch (operator) {
-    case "plus":
+    case "+":
       resultNum = secondNum + firstNum;
       break;
 
-    case "minus":
+    case "-":
       resultNum = secondNum - firstNum;
       break;
 
-    case "umn":
+    case "*":
       resultNum = secondNum * firstNum;
       break;
 
-    case "del":
+    case "/":
       resultNum = secondNum / firstNum;
       break;
 
     default:
       resultNum = firstNum;
   }
+  if (!isFinite(resultNum)) {
+    resultNum = firstNum;
+  }
   result.innerHTML = resultNum;
-  secondNum = 0;
+  secondNum = "";
   firstNum = resultNum;
 }
 
@@ -70,18 +85,27 @@ function clear() {
   result.innerHTML = "";
 }
 
+function clearOne() {
+  firstNum = firstNum.slice(0, -1);
+  result.innerHTML = firstNum;
+}
+
+
 // LOOPS
 
 for (var i = 0; i < nums.length; i++) {
-  nums[i].onclick = setNum;
+  nums[i].addEventListener("click", setNum);
 }
 
 for (var i = 0; i < ops.length; i++) {
-  ops[i].onclick = setOperator;
+  ops[i].addEventListener("click", setOperator);
 }
 
 // EVENTS
+eq.disabled = true;
 
 eq.onclick = getResult;
 
 clearBTN.onclick = clear;
+
+clearOne1.onclick = clearOne;

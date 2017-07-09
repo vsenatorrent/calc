@@ -6,16 +6,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
-  <script src="js/jquery-3.2.1.min.js"></script>
+  <!--  <script src="js/jquery-3.2.1.min.js"></script>-->
 </head>
 
 <body>
-
+<p>Первый калькулятор))</p>
+<p>source: <a href="https://codepen.io/giana/pen/GJMBEv?editors=0010">codepen</a></p>
   <div>
-    <button class="ops" data-ops="plus">+</button>
-    <button class="ops" data-ops="minus">-</button>
-    <button class="ops" data-ops="umn">*</button>
-    <button class="ops" data-ops="del">/</button>
+    <button class="ops" id="plus" data-ops="+">+</button>
+    <button class="ops" id="minus" data-ops="-">-</button>
+    <button class="ops" id="umn" data-ops="*">*</button>
+    <button class="ops" id="del" data-ops="/">/</button>
+    <button id="clearOne">‹‹‹</button>
   </div>
   <div>
     <button class="num">9</button>
@@ -35,10 +37,12 @@
   <div>
     <button class="num zero">0</button>
     <button id="clear">C</button>
-    <button id="eq">=</button>
+    <button id="eq" data-ops="=">=</button>
   </div>
-  <div id="result"></div>
-
+  <div id="result">
+    
+  </div>
+<div id="oper"></div>
 
 
 
