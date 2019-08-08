@@ -12,35 +12,39 @@
 
   <div class="calc">
     <section class="calc-caption">
-      <span class="calc-actions">33 + 33</span>
-      <span class="calc-result">999</span>
+      <div class="calc-actions">
+        <!-- <span class="calc-num1"></span>
+        <span class="calc-operation"></span>
+        <span class="calc-num2"></span> -->
+      </div>
+      <span class="calc-result">0</span>
     </section>
     <section class="btns-row btns-row1">
       <button class="btn btn-clear">C</button>
-      <button class="btn btn-operation">:</button>
+      <button class="btn btn-operation btn-divide" id="divide">:</button>
     </section>
     <section class="btns-row btns-row2">
       <button class="btn btn-num">9</button>
       <button class="btn btn-num">8</button>
       <button class="btn btn-num">7</button>
-      <button class="btn btn-operation">*</button>
+      <button class="btn btn-operation btn-multiply" id="multiply">*</button>
     </section>
     <section class="btns-row btns-row3">
       <button class="btn btn-num">6</button>
       <button class="btn btn-num">5</button>
       <button class="btn btn-num">4</button>
-      <button class="btn btn-operation">-</button>
+      <button class="btn btn-operation btn-subtract" id="subtract">-</button>
     </section>
     <section class="btns-row btns-row3">
       <button class="btn btn-num">3</button>
       <button class="btn btn-num">2</button>
       <button class="btn btn-num">1</button>
-      <button class="btn btn-operation">+</button>
+      <button class="btn btn-operation btn-addition" id="addition">+</button>
     </section>
     <section class="btns-row btns-row4">
       <button class="btn btn-num btn-zero">0</button>
       <button class="btn btn-dot">.</button>
-      <button class="btn btn-operation">=</button>
+      <button class="btn btn-result">=</button>
     </section>
   </div>  
 
