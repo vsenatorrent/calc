@@ -111,13 +111,12 @@
 // clearOne1.onclick = clearOne;
 
 
-//operation fns;
-let num1 = '';
-let storeNum;
-let storeOperation;
-let res;
-let operation;
-// const addition = x => y => Number(x) + Number(y);
+// display data
+
+const actionLayout = document.querySelector('.calc-actions');
+
+const resultLayout = document.querySelector('.calc-result');
+
 const addition = (x,y) => x + y;
 
 const subtract = (x,y) => x - y;
@@ -126,90 +125,79 @@ const divide = (x,y) => x / y;
 
 const multiply = (x,y) => x * y;
 
-const numberClickHandler = event => {
-    num1 += event.target.innerText;
-    // actionElement.children[0].innerText = num1;
-    // if(operation) actionElement.children[2].innerText = num1;
-    
-    if(operation){
-        console.log(num1);
-        calcAction.innerText += num1;
-    }else {
-        calcAction.innerText += num1;
-    }
-    
-}
+let result = 0;
+let action;
 
-//operation variables;
+// numbers
 
-const btnAddition = document.querySelector('.btn-addition');
-const btnSubtract = document.querySelector('.btn-subtract');
-const btnDivide = document.querySelector('.btn-divide');
-const btnMultiply = document.querySelector('.btn-multiply');
-const btnResult = document.querySelector('.btn-result');
+let num1 = '';
+let num2;
+
 
 const numButtons = document.querySelectorAll('.btn-num');
-const operationButtons = document.querySelectorAll('.btn-operation');
 
-const calcAction = document.querySelector('.calc-actions');
-
-// listeners
+const numButtonHandler = (event) => {
+    num1 += event.target.innerText;
+    // if(num2)
+    //     resultButtonHandler(action);
+    // console.log(num1);
+}
 
 Array.from(numButtons).forEach(numButton => {
-    numButton.addEventListener('click', numberClickHandler);
+    numButton.addEventListener('click', numButtonHandler)
 })
 
-const operationHandler = (operation) => {
-    num1 = res ? res : num1;
-    storeNum = operation.bind(null, +num1);
+// operations
+
+const operationButtons = document.querySelectorAll('.btn-operation');
+
+const operationButtonHandler = (event) => {
+    const operation = event.target.id;
+    let actionSymbol;
+    if(operation == 'addition'){
+        action = addition;
+        actionSymbol = '+';
+    }
+        
+    if(operation == 'subtract'){
+        action = subtract;
+        actionSymbol = '-';
+    }
+        
+    if(operation == 'multiply'){
+        action = multiply;
+        actionSymbol = '*';
+    }
+        
+    if(operation == 'divide'){
+        action = divide;
+        actionSymbol = '/';
+    }
+
+    // actionLayout.innerHTML += num1;
+    // actionLayout.innerText += actionSymbol;
+    num2 = num1;
     num1 = '';
-    storeOperation = operation;
 }
 
 Array.from(operationButtons).forEach(operationButton => {
-    operationButton.addEventListener('click', function(event){
-        const operationStr = this.id;
-        // actionElement.children[1].innerText = operationStr;
-        calcAction.innerText += operationStr;
-        switch (operationStr) {
-            case 'addition':
-                operation = addition;
-                break;
-            case 'subtract':
-                operation = subtract;
-                break;
-            case 'multiply':
-                operation = multiply;
-                break; 
-            case 'divide':
-                operation = divide;
-                break;                   
-            default:
-                break;
-        }
-        operationHandler(operation);
-    })
-})
+    operationButton.addEventListener('click', operationButtonHandler);
+});
 
+// result 
 
-// btnAddition.addEventListener('click', event=>{
-//     num1 = res ? res : num1;
-//     storeNum = addition.bind(null, +num1);
-//     num1 = '';
-//     storeOperation = addition;
-// })
+const resultButton = document.querySelector('.btn-result');
 
-const resultElement = document.querySelector('.calc-result');
-const actionElement = document.querySelector('.calc-actions');
-console.log(actionElement)
+const resultButtonHandler = (callback) => {
+    result = callback(+num2, +num1);
+    resultLayout.innerText = result;
+    num1 = result;
+    // console.log(result);
+}
 
-const resultHandler = storeOperation => {
-    res = storeNum(+num1);
-    storeNum = storeOperation.bind(null, res);
-    resultElement.innerText = res;
-    console.log(res);
-};
+const displayResult = () => {
+    resultButtonHandler(action);
+    console.log(result);
+}
 
-btnResult.addEventListener('click', function(event){
-    resultHandler(storeOperation);
-})
+resultButton.addEventListener('click', displayResult);
