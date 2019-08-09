@@ -111,93 +111,124 @@
 // clearOne1.onclick = clearOne;
 
 
-// display data
+const actionButtons = document.querySelectorAll('.btn-action');
 
-const actionLayout = document.querySelector('.calc-actions');
+const actionsStore = document.querySelector('.calc-actions');
 
-const resultLayout = document.querySelector('.calc-result');
-
-const addition = (x,y) => x + y;
-
-const subtract = (x,y) => x - y;
-
-const divide = (x,y) => x / y;
-
-const multiply = (x,y) => x * y;
-
-let result = 0;
-let action;
-
-// numbers
-
-let num1 = '';
-let num2;
-
-
-const numButtons = document.querySelectorAll('.btn-num');
-
-const numButtonHandler = (event) => {
-    num1 += event.target.innerText;
-    // if(num2)
-    //     resultButtonHandler(action);
-    // console.log(num1);
-}
-
-Array.from(numButtons).forEach(numButton => {
-    numButton.addEventListener('click', numButtonHandler)
+Array.from(actionButtons).forEach(actionButton => {
+    actionButton.addEventListener('click', (e)=>{
+        actionsStore.innerText += e.target.innerText;
+    })
 })
 
-// operations
+const clearStore = document.querySelector('.btn-clear');
 
-const operationButtons = document.querySelectorAll('.btn-operation');
+clearStore.addEventListener('click', (e)=>{
+    actionsStore.innerText = '';
+})
 
-const operationButtonHandler = (event) => {
-    const operation = event.target.id;
-    let actionSymbol;
-    if(operation == 'addition'){
-        action = addition;
-        actionSymbol = '+';
-    }
-        
-    if(operation == 'subtract'){
-        action = subtract;
-        actionSymbol = '-';
-    }
-        
-    if(operation == 'multiply'){
-        action = multiply;
-        actionSymbol = '*';
-    }
-        
-    if(operation == 'divide'){
-        action = divide;
-        actionSymbol = '/';
-    }
-
-    // actionLayout.innerHTML += num1;
-    // actionLayout.innerText += actionSymbol;
-    num2 = num1;
-    num1 = '';
+const multiply = str => {
+    let result = 1;
+    const numsArray = str.split('*');
+    numsArray.forEach((num, i) => {
+        console.log(num);
+        if (i === 0) {
+            result = num;
+        } else {
+            result *= num;
+        }
+    })
+    return result;
 }
 
-Array.from(operationButtons).forEach(operationButton => {
-    operationButton.addEventListener('click', operationButtonHandler);
-});
+const divide = str => {
+    let result = 0;
+    const numsArray = str.split('/');
+    numsArray.forEach((num, i) => {
+        if(i === 0){
+            result = num;
+        } else {
+            result /= num;
+        }
+    })
+    return result;
+};
 
-// result 
+const addition = str => {
+    let result = 0;
+    const numsArray = str.split('+');
+    numsArray.forEach((num, i) => {
+        if (i === 0) {
+            result = +num;
+        } else {
+            result += +num;
+        }
+        
+    })
+    return result;
+};
+
+const subtract = str => {
+    let result = 0;
+    const numsArray = str.split('-');
+    numsArray.forEach((num, i) => {
+        if(i === 0){
+            result = num;
+        } else {
+            result -= num;
+        }
+        
+    })
+    return result;
+};
+
+const simplifyExpression = (splitter, tester, operation,  inputValues) => {
+    let simplified;
+    const actionsArray = inputValues.split(splitter);
+    actionsArray.forEach(action => {
+        if (tester.test(action)) {
+            const actionsResult = operation(action);
+            simplified = inputValues.replace(action, actionsResult);
+        }
+    })
+    return simplified;
+}
 
 const resultButton = document.querySelector('.btn-result');
+const resultLayout = document.querySelector('.calc-result');
 
-const resultButtonHandler = (callback) => {
-    result = callback(+num2, +num1);
-    resultLayout.innerText = result;
-    num1 = result;
-    // console.log(result);
-}
+resultButton.addEventListener('click', (e)=>{
+    let inputValues = actionsStore.innerText;
 
-const displayResult = () => {
-    resultButtonHandler(action);
-    console.log(result);
-}
+    const checkMultiply = /\*/.test(inputValues);
+    if(checkMultiply){
+        // const actionsArray = inputValues.split(/[-+\/]/);
+        // actionsArray.forEach(action => {
+        //     if(/\*/.test(action)){
+        //         const actionsResult = multiply(action);
+        //         inputValues = inputValues.replace(action, actionsResult);
+        //     }
+        // })
+        inputValues = simplifyExpression(/[-\+\/]/, /\*/, multiply, inputValues);
+    }
 
-resultButton.addEventListener('click', displayResult);
+    const checkDivide = /\//.test(inputValues);
+    if(checkDivide) {
+        inputValues = simplifyExpression(/[-\+\*]/, /\//, divide, inputValues);
+    }
+
+    const checkSubtract = /-/.test(inputValues);
+    if(checkSubtract){
+        inputValues = simplifyExpression(/[\+\*\/]/, /-/, subtract, inputValues);
+    }
+
+    const checkAddition = /\+/.test(inputValues);
+    if (checkAddition) {
+        inputValues = simplifyExpression(/[\*\/]/, /\+/, addition, inputValues);
+    }
+
+    // console.log('res: ' + inputValues);
+    resultLayout.innerText = inputValues;
+    actionsStore.innerText = inputValues;
+    
+})
